@@ -28,8 +28,10 @@
 
 #include <curl/curl.h>
 #include "curl_exception.h"
+#include "curl_init.h"
 
 using curl::curl_exception;
+using curl::curl_init;
 
 namespace curl {
     /**
@@ -59,23 +61,16 @@ namespace curl {
     
     // Implementation of constructor.
     template<class T> curl_interface<T>::curl_interface() {
-        const CURLcode code = curl_global_init(CURL_GLOBAL_ALL);
-        if (code != CURLE_OK) {
-            throw curl_easy_exception(code,__FUNCTION__);
-        }
+        curl_init::init();
     }
     
     // Implementation of overloaded constructor.
     template<class T> curl_interface<T>::curl_interface(const long flag) {
-        const CURLcode code = curl_global_init(flag);
-        if (code != CURLE_OK) {
-            throw curl_easy_exception(code,__FUNCTION__);
-        }
+        curl_init::init(flag);
     }
     
     // Implementation of the virtual destructor.
     template<class T> curl_interface<T>::~curl_interface() {
-        curl_global_cleanup();
     }
 }
 
